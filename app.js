@@ -1,42 +1,29 @@
-// UI and LS object
+// UI and LS objects
 const ui = new UI()
 const ls = new LS()
 
 // event elements
 const form = document.querySelector('form');
-const booksList = document.querySelector('#books-list');
+const table = document.querySelector("table");
+
 
 // events
 form.addEventListener('submit', addBook);
-document.addEventListener('DOMContentLoaded', getBooks);
-booksList.addEventListener('click', delBook);
 
-function delBook(event){
-    if(event.target.textContent === 'X'){
-        if(confirm('Do you want to delete this book?')){
-            // console.log(event.target.parentElement.parentElement)
-            let isbn = event.target.parentElement.previousElementSibling.textContent;
-            // console.log(isbn);
-            let author = event.target.parentElement.previousElementSibling.previousElementSibling.textContent;
-            // console.log(author);
-            let title = event.target.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
-            // console.log(title);
-            let book = new Book(title, author, isbn);
-            // console.log('Book to delete: ', book);
-            // ui has event to be able to use target
-            ui.delBook(event);
-            ls.delBook(book);
-        }
-    }
-}
+
+document.addEventListener('DOMContentLoaded', getBooks);
+
+table.addEventListener('click', deleteBook);
+
+
 
 function getBooks(){
-    let books = ls.getData('books')
-    for(let i = 0; i < books.length; i++) {
-        let book = books[i];
-        ui.addBook(book)
-    }
+    let books = ls.getData('books');
+    books.forEach(book =>{
+        ui.addBook(book);
+    })
 }
+
 
 function addBook(event){
     // get form input data
@@ -60,3 +47,72 @@ function addBook(event){
     isbnInput.value = '';
     event.preventDefault();
 }
+
+
+
+function deleteBook(event){
+    console.log("delbook sees")
+    if(event.target.textContent === "X"){
+        if(confirm("Do you want to delete this book?")){
+            // deletes the book from UI
+            ui.deleteBook(event);
+
+            // loll lahendus aga hetkel aju ei suuda moelda kuidas teisiti teha
+            let deletedBookISBN = event.target.parentElement.previousElementSibling.textContent;
+            let deletedBookAuthor = event.target.parentElement.previousElementSibling.previousElementSibling.textContent;
+            let deletedBookTitle = event.target.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
+            ls.deleteBook(deletedBookTitle, deletedBookAuthor, deletedBookISBN);
+        }
+    }
+}
+
+
+/*
+function deleteBook(book){
+    let books;
+    if(localStorage.getItem(books) === null){
+        books = [];
+    }else{
+        books = JSON.parse(localStorage.getItem(book."isbn"));
+    }
+    books.push(book);
+
+    localStorage.setItem("books", JSON.stringify(books));
+}
+}
+function deleteBookFromLS(ISBN){
+
+}
+
+function deleteBook(event){
+    const tbody = document.querySelector("tbody");
+    if(event.target.textContent === "X"){
+        if(confirm("Do you want to delete this book?")){
+            event.target.parentElement.parentElement.remove()
+            let bookISBN = event.target.parentElement.previousElementSibling.textContent;
+            deleteBookFromLocalStorage(bookISBN);
+            //tbody.removeChild(event.target.parentElement.parentElement);
+
+        }
+    }
+}
+
+
+function deleteBookFromLocalStorage(bookISBN){
+    let books;
+    if(localStorage.getItem('books') === null){
+        books = [];
+    } else {
+        books = JSON.parse(localStorage.getItem('books'));
+    }
+
+    books.forEach(function (book, index){
+        if(book[2] === bookISBN){
+            books.splice(index, 1);
+        }
+    });
+
+    localStorage.setItem('books', JSON.stringify(books));
+}
+
+ */
