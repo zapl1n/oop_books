@@ -25,7 +25,8 @@ class UI {
         // td for title, author and isbn
         for(let name in book){
             // create <td> element and add text
-            let td = this.addUIElement('td', '', book[name])
+            let td = this.addUIElement('td', '',
+                book[name])
             // add td to tr
             tr.appendChild(td)
         }
