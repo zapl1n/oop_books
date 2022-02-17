@@ -12,6 +12,7 @@ class LS {
     }
     setData(name, data){
         localStorage.setItem(name, JSON.stringify(data));
+
     }
     addBook(book) {
         let books = this.getData('books')
